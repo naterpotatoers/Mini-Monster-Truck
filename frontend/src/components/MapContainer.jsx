@@ -26,7 +26,7 @@ class MapContainer extends Component {
   mapClicked(mapProps, map, clickEvent) {
     const lat = clickEvent.latLng.lat();
     const lng = clickEvent.latLng.lng();
-
+    console.log(lat, lng);
     queue.push({ lat, lng });
     if (timer == null) {
       timer = setTimeout(() => {
