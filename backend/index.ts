@@ -8,7 +8,8 @@ const port = 5000;
 const app = express();
 const networkInterfaces = os.networkInterfaces();
 
-let mmt_data = MOCK_DATA;
+let status = { gps_coordinates: { lat: 0, lng: 0 }, temperature: 0, humidity: 0, pressure: 0, battery: 0, co2: 0, soil_moisture: 0 };
+let commands = { speed: 0, angle: 0, direction: 0 }
 
 export const connection = mysql.createConnection({
     host: "fitlog-db.cfxqvwupnsia.us-west-1.rds.amazonaws.com",
@@ -33,11 +34,11 @@ app.get("/", (req, res) => {
 
 app.get("/commands", (req, res) => {
     console.log("GET /commands");
-    res.json(mmt_data);
+    res.json(commands);
 });
 
 app.post("/commands", (req, res) => {
-    mmt_data = req.body;
+    commands = req.body;
     console.log(req.body)
     console.log("POST /commands");
     res.send("MMT Data Received");
@@ -45,11 +46,11 @@ app.post("/commands", (req, res) => {
 
 app.get("/status", (req, res) => {
     console.log("GET /status");
-    res.json(mmt_data);
+    res.json(status);
 });
 
 app.post("/status", (req, res) => {
-    mmt_data = req.body;
+    status = req.body;
     console.log(req.body)
     console.log("POST /status");
     res.send("Status Data Received");

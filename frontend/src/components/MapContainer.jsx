@@ -28,7 +28,7 @@ class MapContainer extends Component {
     const lng = clickEvent.latLng.lng();
     console.log(lat, lng);
     queue.push({ lat, lng });
-    if (timer == null) {
+    if (timer === null) {
       timer = setTimeout(() => {
         let firstElement = queue[0];
         if (!firstElement) {
@@ -63,7 +63,7 @@ class MapContainer extends Component {
     const lng = e.latLng.lng().toString();
     const coordinates = lat + ", " + lng;
     let markExitst = this.state.markers.filter(
-      (item) => item.position.lat == lat && item.position.lng == lng
+      (item) => item.position.lat === lat && item.position.lng === lng
     );
     console.log("current mark", this.state.markers);
     console.log("lat=>", lat, "log=>", lng);
@@ -71,8 +71,8 @@ class MapContainer extends Component {
     if (markExitst.length !== 0) {
       for (let i = 0; i < this.state.markers.length; i++) {
         if (
-          this.state.markers[i].position.lat == lat &&
-          this.state.markers[i].position.lng == lng
+          this.state.markers[i].position.lat === lat &&
+          this.state.markers[i].position.lng === lng
         ) {
           this.state.markers.splice(i, 1);
           this.setState({ markers: this.state.markers });
