@@ -6,20 +6,23 @@ import MapContainer from './components/MapContainer';
 
 function App() {
   const [isMapView, setIsMapView] = useState(false)
-  // const commands = useRef({ speed: 0, angle: 0, direction: 0 });
   const [commands, setCommands] = useState({ speed: "0", angle: "0", direction: "0" });
 
   function handleSubmit(event) {
     event.preventDefault();
-    // upload commands to server http://localhost:5000/commands
-    console.log(commands);
+
+    const speed = Number(commands.speed);
+    const angle = Number(commands.angle);
+    const direction = Number(commands.direction);
+
     fetch('http://localhost:5000/commands', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(commands)
+      body: JSON.stringify({ speed, angle, direction })
     });
+    console.log({ speed, angle, direction });
   }
   return (
     <div>
