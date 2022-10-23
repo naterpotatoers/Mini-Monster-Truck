@@ -31,18 +31,30 @@ except:
     gps = gpsRead(gps_port,9600)
 
 while True:
-    print(web_response.text)
-    GPS_Coordinates = gps.get_position()
-    response = serial.read_serial()
-    serial.write_serial(web_response.text)
-    response += serial.read_serial()
-    json_format = jsonParse(response)
+    GPS_Coordinates = gps.get_position(status_url)
+    print("My Coordinates:", GPS_Coordinates)
+    print('I sent you', web_response.text)
+    #GPS_Coordinates = gps.get_position()
+    #response = serial.read_serial()
+    try:
+        serial.write_serial(web_response.text)
+    except:
+        pass
+    #response += serial.read_serial()
+    #json_format = jsonParse(response)
+    #print(response)
 
-    json_format["latitude"] = GPS_Coordinates[0]
-    json_format["longitude"] = GPS_Coordinates[1]
-    print("Here", json_format)
+    serial.read_serial()
+    message = "\n"
+    try:
+        serial.write_serial(message)
+    except:
+        pass
+    web_response = requests.get(commands_url)
 
-    if json_format != None:
-        response = ''
-        json_format = json.loads(json_format)
-        web_response = requests.get(get_initial_commands_url, params=json_format)
+    #print("Here", json_format)
+
+    # if json_format != None:
+    #     response = ''
+    #     json_format = json.loads(json_format)
+    #     web_response = requests.get(get_initial_commands_url, params=json_format)
