@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Button, Form } from 'react-bootstrap';
 import DataTable from './components/DataTable';
-import MapContainer from './components/MapContainer';
+// import MapContainer from './components/MapContainer';
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
       <h1>Smart Tractor</h1>
       <button onClick={() => setIsMapView(!isMapView)}>Toggle Map</button>
       <div style={{ display: "grid" }}>
-        {isMapView && <MapContainer />}
+        {/* {isMapView && <MapContainer />} */}
         <form>
           <label>
             Speed:
