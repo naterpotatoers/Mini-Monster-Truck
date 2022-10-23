@@ -6,6 +6,8 @@
 #include <Adafruit_Sensor.h>
 #include <DHT_U.h>
 #include <Servo.h>
+#include <ArduinoJson.h>
+#include <string>
 
 int sensor_values[5];
 // String commands = {"air":sensor_values[0],"soil":sensor_values[1],"heading":sensor_values[2],"speed":sensor_values[3],"angle":sensor_values[4]}
@@ -28,6 +30,7 @@ int direction = 26;
 MPU9250 IMU(Wire, 0x68);
 DHT_Unified dht(DHTPIN, DHTTYPE);
 Servo myservo;
+DynamicJsonDocument doc(1024);
 
 struct magValues
 {
@@ -35,7 +38,8 @@ struct magValues
   float y = 0;
 };
 
-struct dhtValues {
+struct dhtValues
+{
   int temp = 0;
   int humidity = 0;
 };
@@ -65,7 +69,8 @@ int GetMoisturePercent(int moisture_value)
   return 0;
 }
 
-dhtValues GetDhtValues(){
+dhtValues GetDhtValues()
+{
   dhtValues dht_value;
   sensors_event_t event;
   dht.temperature().getEvent(&event);
@@ -73,12 +78,13 @@ dhtValues GetDhtValues(){
   //   Serial.println(F("Error reading temperature!"));
   // }
   // else {
-    dht_value.temp = event.temperature;
-    if(dht_value.temp > 0) {
+  dht_value.temp = event.temperature;
+  if (dht_value.temp > 0)
+  {
     Serial.print(F("Temperature: "));
     Serial.print(dht_value.temp);
     Serial.println(F("°C"));
-    }
+  }
   // }
   // Get humidity event and print its value.
   dht.humidity().getEvent(&event);
@@ -86,14 +92,15 @@ dhtValues GetDhtValues(){
   //   Serial.println(F("Error reading humidity!"));
   // }
   // else {
-    dht_value.humidity = event.relative_humidity;
-    if(dht_value.humidity < 100) {
+  dht_value.humidity = event.relative_humidity;
+  if (dht_value.humidity < 100)
+  {
     Serial.print(F("Humidity: "));
     Serial.print(dht_value.humidity);
     Serial.println(F("%"));
-    }
+  }
   // }
-    return dht_value;
+  return dht_value;
 }
 
 void Move(int rdirection, int speed)
@@ -101,13 +108,13 @@ void Move(int rdirection, int speed)
   if (rdirection == 2)
   {
     digitalWrite(direction, HIGH);
-    delay(10);
+    delay(50);
     analogWrite(pwm, speed);
   }
   else if (rdirection == 1)
   {
     digitalWrite(direction, LOW);
-    // delay(10);
+    delay(50);
     analogWrite(pwm, speed);
   }
   else
@@ -120,10 +127,10 @@ void setup()
 {
   pinMode(pwm, OUTPUT);
   pinMode(direction, OUTPUT);
-  pinMode(pin_for_moisture_sensor, INPUT);
-  sensor_t sensor;
-  dht.temperature().getSensor(&sensor);
-  dht.humidity().getSensor(&sensor);
+  // pinMode(pin_for_moisture_sensor, INPUT);
+  // sensor_t sensor;
+  // dht.temperature().getSensor(&sensor);
+  // dht.humidity().getSensor(&sensor);
   myservo.attach(servopin);
   // IMU.begin();
   // IMU.setDlpfBandwidth(MPU9250::DLPF_BANDWIDTH_20HZ);
@@ -132,7 +139,7 @@ void setup()
 }
 void loop()
 {
-  int heading = 0;
+  // int heading = 0;
   // int moisture = 0;
   int dir = 0;
   int speed = 0;
@@ -142,14 +149,20 @@ void loop()
   // dhtValues dht_values;
   // magValues mag_values;
   // IMU.readSensor();
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0)
+  {
     String data = Serial.readStringUntil('\n');
     Serial.print("You sent me: ");
     Serial.println(data);
+    const char *kResponseBodyFormat = "{\"speed\":%d,\"angle\":%d,\"dir\":%d}";
+    int actual_arguments = sscanf(
+        data.c_str(), kResponseBodyFormat,
+        &speed, &steer_angle, &dir);
+    Serial.print(speed);
   }
   // Serial.print("Hello There!!!");
   delay(1000);
-  Move(dir, speed); //pass in 0 for stopping, 1 for forward, and 2 for backwards
+  Move(dir, speed); // pass in 0 for stopping, 1 for forward, and 2 for backwards
   myservo.write(steer_angle);
   // heading = GetHeading(GetMagValues()); // heading has the heading from the magnometer
   // moisture = analogRead(pin_for_moisture_sensor); //will read the raw data for moisture
