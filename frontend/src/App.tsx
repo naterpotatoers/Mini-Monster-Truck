@@ -1,25 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useRef } from 'react'
+import DataTable from './components/DataTable';
+import MapContainer from './components/MapContainer';
+
 
 function App() {
+  const [isMapView, setIsMapView] = useState(false)
+  const commands = useRef({});
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      <h1>Smart Tractor</h1>
+      <button onClick={() => setIsMapView(!isMapView)}>Toggle Map</button>
+      <div style={{ display: "flex" }}>
+        {isMapView && <MapContainer commands={commands} />}
+        <DataTable />
+      </div>
+
+    </div >
   );
 }
 
