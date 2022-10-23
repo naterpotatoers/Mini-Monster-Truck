@@ -1,32 +1,35 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { Button, Form } from 'react-bootstrap';
 import DataTable from './components/DataTable';
-import MapContainer from './components/MapContainer';
+// import MapContainer from './components/MapContainer';
 
 
 function App() {
   const [isMapView, setIsMapView] = useState(false)
-  // const commands = useRef({ speed: 0, angle: 0, direction: 0 });
   const [commands, setCommands] = useState({ speed: "0", angle: "0", direction: "0" });
 
   function handleSubmit(event) {
     event.preventDefault();
-    // upload commands to server http://localhost:5000/commands
-    console.log(commands);
+
+    const speed = Number(commands.speed);
+    const angle = Number(commands.angle);
+    const direction = Number(commands.direction);
+
     fetch('http://localhost:5000/commands', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(commands)
+      body: JSON.stringify({ speed, angle, direction })
     });
+    console.log({ speed, angle, direction });
   }
   return (
     <div>
       <h1>Smart Tractor</h1>
       <button onClick={() => setIsMapView(!isMapView)}>Toggle Map</button>
       <div style={{ display: "grid" }}>
-        {isMapView && <MapContainer />}
+        {/* {isMapView && <MapContainer />} */}
         <form>
           <label>
             Speed:
