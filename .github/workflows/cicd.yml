@@ -26,7 +26,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Installing frontend...
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Building frontend...
         run: npm run build

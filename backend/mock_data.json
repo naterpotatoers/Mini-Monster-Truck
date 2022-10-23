@@ -1,0 +1,12 @@
+{
+  "date": "2019-01-01",
+  "coordinates": {
+    "lat": 0,
+    "lon": 0
+  },
+  "temperature": 0,
+  "humidity": 0,
+  "soil-moisture": 0,
+  "air-quality": 0,
+  "co2": 0
+}
